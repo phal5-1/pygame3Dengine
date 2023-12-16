@@ -43,6 +43,7 @@ class ExtendedBaseModel(BaseModel):
         self.on_init()
         
     def update(self):
+        self.m_model = self.get_model_matrix()
         self.texture.use(location = 0)
         self.program['camPos'].write(self.camera.position)
         self.program['m_view'].write(self.camera.m_view)
