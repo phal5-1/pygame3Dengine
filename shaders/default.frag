@@ -66,44 +66,60 @@ vec3 getLight(vec3 color) {
     return color * brightness;
 }
 
+float pow2Exp(float f, int i) {
+    for (int j = 0; j <= i; ++j) {
+        f *= f;
+    }
+    return f;
+}
+
+float powint(float f, int i) {
+    float result = f;
+    for (int j = 0; j <= i; ++j) {
+        result *= f;
+    }
+    return result;
+}
+
 vec3 getToonLight(vec3 color) {
     vec3 Normal = normal;
 
-    //ambient
-    vec3 ambient = light.Ia;
-
     //diffuse
     vec3 lightDir = light.position - fragPos;
-    float diff = max(0, dot(lightDir, Normal)) * dot(lightDir, Normal);
-    float diffOne = dot(lightDir, lightDir) * dot(Normal, Normal);
+    float diff = max(0, dot(lightDir, Normal)) * dot(lightDir, Normal) * dot(light.Id, vec3(0.33333, 0.33333, 0.33333));
+    float diffOne = dot(lightDir, lightDir) * dot(Normal, Normal) * dot(light.Id, vec3(0.33333, 0.33333, 0.33333));
+    //diff = (diff > diffOne * 0.9)? 1 : (diff > diffOne * 0.4)? 0.95 : (diff > diffOne * 0)? 0.65 : 0;
 
     //specular
     vec3 viewDir = camPos - fragPos;
     vec3 reflectDir = reflect(-lightDir, Normal);
-    float spec = max(dot(viewDir, reflectDir), 0) * 0.0001 * dot(viewDir, reflectDir);
-    float specOne = dot(viewDir, viewDir) * dot(reflectDir, reflectDir) * 0.0001;
+    int smoothness = 0;
+    float spec = pow2Exp(max(dot(viewDir, reflectDir), 0), smoothness + 1) * dot(light.Is, vec3(0.33333, 0.33333, 0.33333));
+    float specOne = pow2Exp(dot(viewDir, viewDir) * dot(reflectDir, reflectDir), smoothness) * dot(light.Is, vec3(0.33333, 0.33333, 0.33333));
+    //spec = (spec > specOne * 0.9 )? 1 : (spec > specOne * 0.4 )? 0.95 : (spec > specOne * 0 )? 0.65 : 0;
+
+    spec *= diffOne;
+    diff *= specOne;
+    float diffSpec = spec + diff;
+    float diffSpecTwo = diffOne * specOne * 2;
+
+    diffSpec = (diffSpec > diffSpecTwo * 0.9)? 1 : (diffSpec > diffSpecTwo * 0.4)? 0.95 : (diffSpec > 0)? 0.65 : 0;
 
     //shadow
     float shadow = sqrt(getSoftShadowX16());
-    vec3 diffSpecVec = (light.Id + light.Is) * 0.5;
 
-    float diffSpec = diff * light.Id.x + spec * light.Is.x;
-    float diffSpecOne = diffOne * light.Id.x + specOne * light.Is.x;
-    diffSpec = (diffSpec > diffSpecOne * 0.9)? 1 : (diffSpec > diffSpecOne * 0.4)? 0.9 : (diffSpec > 0)? 0.4 : 0;
+    vec3 diffSpecColor = (light.Id + light.Is) * 0.5;
 
-    vec3 tooned = diffSpec * diffSpecVec * shadow;
-    vec3 brightness = (ambient + tooned);
+    vec3 tooned = ((diffSpec) * diffSpecColor) * shadow;
+    vec3 brightness = (light.Ia + tooned);
 
     return color * brightness;
 }
 
 void main() {
-    float gamma = 2.2;
     vec3 color = texture(u_texture_0, uv_0).rgb;
-    color = pow(color, vec3(gamma));
 
     color = getToonLight(color);
 
-    color = pow(color, 1 / vec3(gamma));
     fragColor = vec4(color, 1.0);
 }
