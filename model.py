@@ -5,7 +5,7 @@ import glm
 class BaseModel:
     def __init__(self, app, vao_name, tex_id, pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
         self.app = app
-        self.pos = pos
+        self.pos = glm.vec3([a for a in pos])
         self.scale = scale
         self.rot = glm.vec3([glm.radians(a) for a in rot])
         self.m_model = self.get_model_matrix()

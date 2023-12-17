@@ -32,7 +32,9 @@ class Texture:
         return texture_cube
         
     def get_depth_texture(self):
-        depth_texture = self.ctx.depth_texture((settings.screen_dimensions[0] * 2, settings.screen_dimensions[1] * 2))
+        depth_texture = self.ctx.depth_texture((settings.screen_dimensions[0], settings.screen_dimensions[1]))
+        depth_texture.repeat_x = False
+        depth_texture.repeat_y = False
         return depth_texture
         
     def get_texture(self, path):
