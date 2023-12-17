@@ -19,7 +19,6 @@ class GraphicsEngine:
     initiated = False
     def __init__(self, windowDimensions = settings.screen_dimensions):
         if not GraphicsEngine.initiated:
-            #WIN_SIZE
             self.screenDimensions = windowDimensions
             
             #openGL attr

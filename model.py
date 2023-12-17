@@ -99,6 +99,14 @@ class Cube(ExtendedBaseModel):
     def __init__(self, app, vao_name = 'cube', tex_id = 0, pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
         super().__init__(app, vao_name, tex_id, pos, rot, scale)
         
+class Sphere(ExtendedBaseModel):
+    def __init__(self, app, vao_name = 'sphere', tex_id = 0, pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
+        super().__init__(app, vao_name, tex_id, pos, rot, scale)
+        
+class Jellyfish(ExtendedBaseModel):
+    def __init__(self, app, vao_name = 'jellyfish', tex_id = 0, pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
+        super().__init__(app, vao_name, tex_id, pos, rot, scale)
+        
 class SkyBox(BaseModel):
     def __init__(self, app, vao_name = 'skybox', tex_id = 'skybox', pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
         super().__init__(app, vao_name, tex_id, pos, rot, scale)

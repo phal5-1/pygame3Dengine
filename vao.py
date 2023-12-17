@@ -25,6 +25,24 @@ class VAO:
             program = self.program.programs['shadow_map'],
             vbo = self.vbo.vbos['plane'])
         
+        self.vaos['sphere'] = self.get_vao(
+            program = self.program.programs['default'],
+            vbo = self.vbo.vbos['sphere'])
+        
+        self.vaos['shadow_sphere'] = self.get_vao(
+            program = self.program.programs['shadow_map'],
+            vbo = self.vbo.vbos['sphere'])
+        
+        self.vaos['jellyfish'] = self.get_vao(
+            program = self.program.programs['default'],
+            vbo = self.vbo.vbos['jellyfish'])
+        
+        self.vaos['shadow_jellyfish'] = self.get_vao(
+            program = self.program.programs['shadow_map'],
+            vbo = self.vbo.vbos['jellyfish'])
+        
+        
+        
         self.vaos['skybox'] = self.get_vao(
             program = self.program.programs['skybox'],
             vbo = self.vbo.vbos['skybox'])

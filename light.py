@@ -8,7 +8,7 @@ class Light:
         #intensities
         self.Ia = 0.1 * self.color #ambient
         self.Id = 0.8 * self.color #diffuse
-        self.Is = 0.0 * self.color #specular
+        self.Is = 1.0 * self.color #specular
         #view matrix
         #self.m_view_light = self.get_view_matrix(self.direction)
         
