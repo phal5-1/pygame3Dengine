@@ -2,6 +2,8 @@ import moderngl
 import numpy
 import glm
 
+import settings
+
 class BaseModel:
     def __init__(self, app, vao_name, tex_id, pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
         self.app = app
@@ -57,7 +59,9 @@ class ExtendedBaseModel(BaseModel):
         self.shadow_vao.render()
         
     def on_init(self):
-        self.program['m_view_light'].write(self.app.light.m_view_light)
+        self.program['m_view_light'].write(self.app.light.get_view_matrix(self.pos))
+        #resolution
+        self.program['u_resolution'].write(glm.vec2(settings.screen_dimensions))
         
         #depth texture
         self.depth_texture = self.app.mesh.texture.textures['depth_texture']
@@ -68,7 +72,7 @@ class ExtendedBaseModel(BaseModel):
         self.shadow_vao = self.app.mesh.vao.vaos['shadow_' + self.vao_name]
         self.shadow_program = self.shadow_vao.program
         self.shadow_program['m_proj'].write(self.camera.m_proj)
-        self.shadow_program['m_view_light'].write(self.app.light.m_view_light)
+        self.shadow_program['m_view_light'].write(self.app.light.get_view_matrix(self.pos))
         self.shadow_program['m_model'].write(self.m_model)
         
         #texture
@@ -86,6 +90,10 @@ class ExtendedBaseModel(BaseModel):
         self.program['light.Ia'].write(self.app.light.Ia)
         self.program['light.Id'].write(self.app.light.Id)
         self.program['light.Is'].write(self.app.light.Is)
+        
+class Plane(ExtendedBaseModel):
+    def __init__(self, app, vao_name = 'plane', tex_id = 'cult_leader', pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):
+        super().__init__(app, vao_name, tex_id, pos, rot, scale)
         
 class Cube(ExtendedBaseModel):
     def __init__(self, app, vao_name = 'cube', tex_id = 0, pos = (0, 0, 0), rot = (0, 0, 0), scale = (1, 1, 1)):

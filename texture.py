@@ -8,6 +8,8 @@ class Texture:
         self.ctx = ctx
         self.textures = {}
         self.textures[0] = self.get_texture(path = './Image/Textures/floorTileNa.png')
+        self.textures['minju'] = self.get_texture(path = './Image/Textures/minju.png')
+        self.textures['cult_leader'] = self.get_texture(path = './Image/Textures/cultLeader.png')
         self.textures['skybox'] = self.get_texture_cube(path = './Image/Textures/Skybox/', ext = 'png')
         self.textures['depth_texture'] = self.get_depth_texture()
         

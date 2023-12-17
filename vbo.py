@@ -6,6 +6,7 @@ class VBO:
     def __init__(self, ctx):
         self.vbos = {}
         self.vbos['cube'] = CubeVBO(ctx)
+        self.vbos['plane'] = PlaneVBO(ctx)
         self.vbos['skybox'] = SkyBoxVBO(ctx)
         self.vbos['advanced_skybox'] = AdvancedSkyBoxVBO(ctx)
         
@@ -28,6 +29,33 @@ class BaseVBO:
     
     def destroy(self):
         self.vbo.release()
+        
+class PlaneVBO(BaseVBO):
+    def __init__(self, ctx):
+        super().__init__(ctx)
+        self.format = '2f 3f 3f'
+        self.attribs = ['in_texcoord_0', 'in_normal', 'in_position']
+        
+    @staticmethod
+    def get_data(vertices, indices):
+        data = [vertices[ind] for triangle in indices for ind in triangle]
+        return numpy.array(data, dtype = 'f4')
+    
+    def get_vertex_data(self):
+        vertices = [(-1, 0, 1), (1, 0, 1), (1, 0, -1), (-1, 0, -1)]
+        indices = [(0, 1, 2), (0, 2, 3), (2, 1, 0), (3, 2, 0)]
+        vertex_data = self.get_data(vertices, indices)
+        
+        tex_coord = [(0, 0), (1, 0), (1, 1), (0, 1)]
+        tex_coord_indices = [(3, 2, 1), (3, 1, 0), (1, 2, 3), (0, 1, 3)]
+        tex_coord_data = self.get_data(tex_coord, tex_coord_indices)
+        
+        normals = [(0, 1, 0) * 6, (0, -1, 0) * 6]
+        
+        normals = numpy.array(normals, dtype = 'f4').reshape(12, 3)
+        vertex_data = numpy.hstack([normals, vertex_data])
+        vertex_data = numpy.hstack([tex_coord_data, vertex_data])
+        return vertex_data
     
 class CubeVBO(BaseVBO):
     def __init__(self, ctx):

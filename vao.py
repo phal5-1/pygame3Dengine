@@ -17,6 +17,14 @@ class VAO:
             program = self.program.programs['shadow_map'],
             vbo = self.vbo.vbos['cube'])
         
+        self.vaos['plane'] = self.get_vao(
+            program = self.program.programs['default'],
+            vbo = self.vbo.vbos['plane'])
+        
+        self.vaos['shadow_plane'] = self.get_vao(
+            program = self.program.programs['shadow_map'],
+            vbo = self.vbo.vbos['plane'])
+        
         self.vaos['skybox'] = self.get_vao(
             program = self.program.programs['skybox'],
             vbo = self.vbo.vbos['skybox'])

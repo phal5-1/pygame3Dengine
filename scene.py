@@ -1,4 +1,5 @@
 from model import *
+from random import randint
 
 class Scene:
     def __init__(self, app):
@@ -17,12 +18,19 @@ class Scene:
         add = self.add_object
         
         n, s = 80, 2
+        
         for x in range(-n, n, s):
             for z in range(-n, n, s):
                 add(Cube(app, pos = (x, -s, z)))
         
         self.a = Cube(app, pos = [0, 1, -5])
         add(self.a)
+        
+        self.b = Plane(app, pos = (0, 1, 0), rot = (-90, 0, 0))
+        add(self.b)
+        
+        self.c = Plane(app, pos = (5, 1, 0), rot = (-90, 0, 0), scale = (1, 1, 2), tex_id = 'minju')
+        add(self.c)
         '''
         add(Cube(app))
         add(Cube(app, pos = (-2.5, 0, 0), rot = (45, 0, 0), scale = (1, 2, 1)))
@@ -36,3 +44,5 @@ class Scene:
         
     def update(self):
         self.a.rot[0] = self.app.time
+        self.b.rot[2] = self.app.time * 2
+        #self.a.pos = self.app.camera.position
